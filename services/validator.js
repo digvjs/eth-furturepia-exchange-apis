@@ -54,5 +54,14 @@ module.exports = {
 
     },
 
+    /** For transaction routes */
+    trx: {
+
+        getBlock: Joi.object().keys({
+            blockNum: Joi.number().required()
+        }),
+
+    },
+
   }
 }
