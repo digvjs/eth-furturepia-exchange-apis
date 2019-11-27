@@ -8,7 +8,9 @@ const {
 module.exports = {
 
     get: (uri, options = {}) => {
-        // options.headers.authorization = 'API-KEY ';
+        options['headers'] = {
+            // 'authorization': 'API-KEY '
+        }
         return axios.get(futurepiaApiUri + uri, options)
             .then(response => {
                 return response.data;
@@ -20,7 +22,10 @@ module.exports = {
     },
 
     post: (uri, data, options = {}) => {
-        // options.headers.authorization = 'API-KEY ';
+        options['headers'] = {
+            // 'authorization': 'API-KEY '
+        }
+
         return axios.post(futurepiaApiUri + uri, data, options)
             .then(response => {
                 return response.data;
@@ -32,7 +37,10 @@ module.exports = {
     },
 
     put: (uri, data, options = {}) => {
-        // options.headers.authorization = 'API-KEY ';
+        options['headers'] = {
+            // 'authorization': 'API-KEY '
+        }
+
         return axios.put(futurepiaApiUri + uri, data, options)
             .then(response => {
                 return response.data;
@@ -44,7 +52,10 @@ module.exports = {
     },
 
     delete: (uri, options = {}) => {
-        // options.headers.authorization = 'API-KEY ';
+        options['headers'] = {
+            // 'authorization': 'API-KEY '
+        }
+
         return axios.delete(futurepiaApiUri + uri, options)
             .then(response => {
                 return response.data;
