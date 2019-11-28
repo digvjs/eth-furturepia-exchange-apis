@@ -16,6 +16,7 @@
     "express-validator": "^5.0.1",
     "joi": "^14.3.1",
     "morgan": "~1.9.0",
-    "randomstring": "^1.1.5"
+    "randomstring": "^1.1.5",
+    "web3": "^1.2.4"
   }
 }

@@ -1,8 +1,12 @@
 var express = require('express');
 var router = express.Router();
 
-const versions = {
-    'v1': require('./v1')
+const pia = {
+    'v1': require('./pia/v1')
+};
+
+const eth = {
+    'v1': require('./eth/v1')
 };
 
 /* GET home page. */
@@ -23,6 +27,7 @@ router.use('/api', (req, res, next) => {
     next();
 });
 
-router.use('/api/v1', versions['v1']);
+router.use('/api/pia/v1', pia['v1']);
+router.use('/api/eth/v1', eth['v1']);
 
 module.exports = router;
