@@ -16,6 +16,24 @@ module.exports = {
     },
     
     schemas: {
+
+        /** Auth routes */
+        auth: {
+            
+            login: Joi.object().keys({
+                wallet_id: Joi.string().required(),
+                password: Joi.string().required()
+            }),
+
+            register: Joi.object().keys({
+                wallet_id: Joi.string().required(),
+                password: Joi.string().required(),
+                first_name: Joi.string().required(),
+                last_name: Joi.string().required(),
+                email: Joi.string().email().required()
+            }),
+
+        },
         
         pia: {
             /** For account routes */
