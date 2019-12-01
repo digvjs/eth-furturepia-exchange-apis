@@ -4,7 +4,7 @@ const sequelize = require('../services/database');
 
 const PROTECTED_ATTRIBUTES = ['password', 'token'];
 
-module.exports = sequelize.define('users', {
+module.exports = sequelize.define('User', {
     
     id: {
         type: Sequelize.INTEGER(11).UNSIGNED,
@@ -20,7 +20,6 @@ module.exports = sequelize.define('users', {
     password: {
         type: Sequelize.STRING(50),
         allowNull: false,
-        return: false,
         validate: {
             len: [6, 50]
         }

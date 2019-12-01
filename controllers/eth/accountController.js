@@ -15,6 +15,8 @@
 
 const web3 = require('../../services/web3');
 const Contracts = require('../../tokens/eth/contract');
+const utils = require('../../services/utils/ethUtils');
+const EthAccount = require('../../models/EthereumAccount');
 
 module.exports = {
     /**
@@ -25,18 +27,32 @@ module.exports = {
     */
     createAccount: async (req, res) => {
         try {
-            let account = web3.eth.accounts.create();
-            console.log(`Account was created addr: ${account.address}`);
-            res.json({
-                success: true,
-                address: account.address,
-                privateKey: account.privateKey
-            });
+            EthAccount.findOne({ where: { user_id: req.decoded.id }})
+            .then(async (data) => {
+                if (data) {
+                    res.status(400).json({ message: 'User already has Ethereum account.' });
+                    
+                } else {
+                    let account = await utils.createAccount();
+                    console.log(`Account was created addr: ${account.address}`);
+                    
+                    EthAccount.create({ 
+                        user_id : req.decoded.id ,
+                        wallet_address: account.address,
+                        private_key: account.privateKey
+                    })
+                    
+                    res.json({
+                        success: true,
+                        address: account.address,
+                        privateKey: account.privateKey
+                    });
+                }
+            })
+            
         } catch (ex) {
             console.log(ex);
-            res.status(400).json({
-                message: ex.message
-            });
+            res.status(400).json({ message: ex.message });
         }
     },
     
@@ -49,24 +65,23 @@ module.exports = {
     getEthBalance: async (req, res) => {
         
         if (!web3.utils.isAddress(req.body.address)) {
-            return res.status(422).json({
-                message: "invalid address"
-            });
+            return res.status(422).json({ message: "invalid address" });
         }
         
         try {
-            let address = req.body.address;
-            let balance = await web3.eth.getBalance(address);    
-            res.json({
-                success: true,
-                address: address,
-                balance: web3.utils.fromWei(balance, "ether")
+            EthAccount.findOne({ where: { user_id: req.decoded.id }}).then(async (data) => {
+                if (data) {
+                    let balance = await web3.eth.getBalance(data.wallet_address);    
+                    res.json({
+                        success: true,
+                        address: data.wallet_address,
+                        balance: web3.utils.fromWei(balance, "ether")
+                    });
+                }
             });
         } catch (ex) {
             console.log(ex);
-            res.status(400).json({
-                message: ex.message
-            });
+            res.status(400).json({ message: ex.message });
         }
     },
     
@@ -81,15 +96,11 @@ module.exports = {
         let walletAddr = req.body.wallet_address;
         
         if (!web3.utils.isAddress(tokenAddr)) {
-            return res.status(422).json({
-                message: "invalid token contract address"
-            });
+            return res.status(422).json({ message: "invalid token contract address" });
         }
         
         if (!web3.utils.isAddress(walletAddr)) {
-            return res.status(422).json({
-                message: "invalid wallet address"
-            });
+            return res.status(422).json({ message: "invalid wallet address" });
         }
         
         try {
@@ -111,9 +122,7 @@ module.exports = {
             
         } catch (ex) {
             console.log(ex);
-            res.status(400).json({
-                message: ex.message
-            });
+            res.status(400).json({ message: ex.message });
         }
     },
     
@@ -131,9 +140,7 @@ module.exports = {
         let value = req.body.value;
         
         if (!web3.utils.isAddress(toAddr)) {
-            return res.status(422).json({
-                message: "invalid address"
-            });
+            return res.status(422).json({ message: "invalid address" });
         }
         
         const {
@@ -174,17 +181,13 @@ module.exports = {
             .on('error', error => {
                 console.log(error);
                 if (!replied) {
-                    res.status(400).json({
-                        message: String(error)
-                    });
+                    res.status(400).json({ message: String(error) });
                 }
             }); // If a out of gas error, the second parameter is the receipt.
         } catch (ex) {
             console.log(ex);
             if (!replied) {
-                res.status(400).json({
-                    message: ex.message
-                });
+                res.status(400).json({ message: ex.message });
             }
         }
         
@@ -203,15 +206,11 @@ module.exports = {
         let value = parseFloat(req.body.value);
         
         if (!web3.utils.isAddress(tokenAddr)) {
-            return res.status(422).json({
-                message: "invalid token contract address"
-            });
+            return res.status(422).json({ message: "invalid token contract address" });
         }
         
         if (!web3.utils.isAddress(walletAddr)) {
-            return res.status(422).json({
-                message: "invalid wallet address"
-            });
+            return res.status(422).json({ message: "invalid wallet address" });
         }
         
         const {
@@ -256,17 +255,13 @@ module.exports = {
             })
             .on('error', error => {
                 console.log(error);
-                res.status(400).json({
-                    message: String(error)
-                });
+                res.status(400).json({ message: String(error) });
             }); // If a out of gas error, the second parameter is the receipt.
             
             
         } catch (ex) {
             console.log(ex);
-            res.status(400).json({
-                message: ex.message
-            });
+            res.status(400).json({ message: ex.message });
         }
         
     },

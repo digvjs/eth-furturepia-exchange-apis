@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-const { validateToken } = require('../services/utils');
+const { validateToken } = require('../services/middleware');
 
 const pia = {
     'v1': require('./pia/v1')
