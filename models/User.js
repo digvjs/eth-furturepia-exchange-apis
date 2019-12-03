@@ -15,7 +15,10 @@ module.exports = sequelize.define('User', {
     wallet_id: {
         type: Sequelize.STRING(50),
         unique: true,
-        allowNull: false
+        allowNull: false,
+        validate: {
+            len: [3, 16]
+        }
     },
     password: {
         type: Sequelize.STRING(50),
