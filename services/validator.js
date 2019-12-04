@@ -117,6 +117,16 @@ module.exports = {
             },
             
         },
+
+        bridge: {
+
+            tokenExchange: Joi.object().keys({
+                from_token_id: Joi.number().required(),
+                to_token_id: Joi.number().required(),
+                amount: Joi.number().required()
+            }),
+
+        }
         
     }
 }

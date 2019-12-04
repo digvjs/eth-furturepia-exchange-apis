@@ -25,7 +25,7 @@ module.exports = sequelize.define('Token', {
         allowNull: false
     },
     token_address: {
-        type: Sequelize.STRING(100)
+        type: Sequelize.STRING(100),
         allowNull: true
     },
     is_active: {
